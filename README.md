@@ -15,7 +15,7 @@
 ## 과제 결과물 위치
 
 - 요구사항 명세서: `doc/requirement.md`
-- 프로젝트 관리 계획서: doc/project_plan.md
+- 프로젝트 관리 계획서: 'doc/project_plan.md'
 
 ---
 
