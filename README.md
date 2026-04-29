@@ -16,6 +16,7 @@
 
 - 요구사항 명세서: `doc/requirement.md`
 - 프로젝트 관리 계획서: `doc/project_plan.md`
+- 요구사항 정의서 : `doc/요구사항 정의서.md`
 
 ---
 
