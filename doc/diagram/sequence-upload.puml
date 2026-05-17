@@ -1,0 +1,28 @@
+@startuml
+
+actor "사용자" as User
+boundary "파일 업로드 화면" as UI
+control "파일 컨트롤러" as FileController
+entity "File" as File
+entity "FileMetadata" as Metadata
+control "StorageService" as Storage
+entity "SystemLog" as Log
+
+User -> UI : 업로드할 파일 선택
+UI -> FileController : 파일 업로드 요청(file)
+FileController -> File : 파일 객체 생성()
+FileController -> Metadata : 파일 메타데이터 생성()
+FileController -> Storage : 파일 저장 요청()
+
+alt 저장 성공
+  Storage --> FileController : 저장 성공
+  FileController -> Log : 업로드 로그 생성()
+  FileController --> UI : 업로드 성공
+  UI --> User : 업로드 완료 메시지 표시
+else 저장 실패
+  Storage --> FileController : 저장 실패
+  FileController --> UI : 실패 사유 전달
+  UI --> User : 업로드 실패 메시지 표시
+end
+
+@enduml
