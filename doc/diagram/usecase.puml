@@ -1,0 +1,49 @@
+@startuml
+left to right direction
+
+actor "사용자" as User
+actor "팀 관리자" as TeamManager
+actor "시스템 관리자" as SystemAdmin
+actor "파일 저장소" as FileStorage
+actor "알림 서버" as NotificationServer
+
+rectangle "업무 문서 공유 시스템" {
+  usecase "로그인하기" as UC01
+  usecase "문서 업로드하기" as UC02
+  usecase "문서 검색하기" as UC03
+  usecase "문서 다운로드하기" as UC04
+  usecase "문서 권한 변경하기" as UC05
+  usecase "문서 버전 복구하기" as UC06
+  usecase "팀 공간 관리하기" as UC07
+  usecase "사용자 계정 관리하기" as UC08
+  usecase "시스템 로그 조회하기" as UC09
+  usecase "문서 저장하기" as UC10
+  usecase "알림 발송하기" as UC11
+}
+
+User --> UC01
+User --> UC02
+User --> UC03
+User --> UC04
+User --> UC06
+
+TeamManager --> UC01
+TeamManager --> UC05
+TeamManager --> UC06
+TeamManager --> UC07
+
+SystemAdmin --> UC01
+SystemAdmin --> UC08
+SystemAdmin --> UC09
+
+UC02 --> UC10 : <<include>>
+UC04 --> UC10 : <<include>>
+UC06 --> UC10 : <<include>>
+
+UC05 --> UC11 : <<extend>>
+UC06 --> UC11 : <<extend>>
+
+FileStorage --> UC10
+NotificationServer --> UC11
+
+@enduml
