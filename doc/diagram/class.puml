@@ -1,0 +1,121 @@
+@startuml
+
+class User {
+  - userId: String
+  - email: String
+  - password: String
+  - name: String
+  - status: String
+  + login(): boolean
+  + uploadDocument(): void
+  + searchDocument(): List<Document>
+  + downloadDocument(): void
+  + restoreVersion(): void
+}
+
+class TeamManager {
+  - managerId: String
+  + changePermission(): void
+  + manageTeamSpace(): void
+  + manageMember(): void
+}
+
+class SystemAdmin {
+  - adminId: String
+  + manageUserAccount(): void
+  + searchAuditLog(): List<AuditLog>
+}
+
+class TeamSpace {
+  - teamSpaceId: String
+  - teamName: String
+  - createdAt: Date
+  + addMember(): void
+  + removeMember(): void
+  + updateTeamInfo(): void
+}
+
+class Document {
+  - documentId: String
+  - ownerId: String
+  - teamSpaceId: String
+  - currentVersionId: String
+  - storagePath: String
+  + upload(): void
+  + download(): void
+  + delete(): void
+  + createVersion(): void
+}
+
+class DocumentMetadata {
+  - metadataId: String
+  - documentName: String
+  - extension: String
+  - size: Long
+  - uploadedAt: Date
+  + updateMetadata(): void
+}
+
+class DocumentVersion {
+  - versionId: String
+  - documentId: String
+  - versionNumber: int
+  - createdAt: Date
+  - storagePath: String
+  + createVersion(): void
+  + restoreVersion(): void
+}
+
+class Permission {
+  - permissionId: String
+  - documentId: String
+  - targetUserId: String
+  - accessLevel: String
+  + checkPermission(): boolean
+  + updatePermission(): void
+}
+
+class FileStorage {
+  - storageId: String
+  - storageName: String
+  + saveDocument(): boolean
+  + loadDocument(): Document
+  + loadVersion(): DocumentVersion
+  + deleteDocument(): boolean
+}
+
+class NotificationService {
+  - serverAddress: String
+  + sendPermissionChangedNotice(): void
+  + sendVersionRestoredNotice(): void
+}
+
+class AuditLog {
+  - logId: String
+  - actorId: String
+  - action: String
+  - createdAt: Date
+  + createLog(): void
+  + searchLog(): List<AuditLog>
+}
+
+User <|-- TeamManager
+User <|-- SystemAdmin
+
+TeamSpace "1" -- "0..*" User : has members
+TeamSpace "1" -- "0..*" Document : contains
+User "1" -- "0..*" Document : uploads
+
+Document "1" -- "1" DocumentMetadata : has
+Document "1" -- "1..*" DocumentVersion : has
+Document "1" -- "0..*" Permission : controls
+
+Document ..> FileStorage : stored in
+DocumentVersion ..> FileStorage : restored from
+Permission ..> NotificationService : notifies
+DocumentVersion ..> NotificationService : notifies
+User ..> AuditLog : records
+TeamManager ..> AuditLog : records
+SystemAdmin ..> AuditLog : searches
+
+@enduml
