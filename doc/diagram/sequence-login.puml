@@ -1,0 +1,25 @@
+@startuml
+
+actor "사용자" as User
+boundary "로그인 화면" as UI
+control "인증 컨트롤러" as Auth
+entity "User" as UserEntity
+entity "SystemLog" as Log
+
+User -> UI : 이메일/비밀번호 입력
+UI -> Auth : 로그인 요청(email, password)
+Auth -> UserEntity : 계정 정보 검증()
+
+alt 인증 성공
+  UserEntity --> Auth : 인증 성공
+  Auth -> Log : 로그인 로그 생성()
+  Auth --> UI : 세션 생성 및 로그인 성공
+  UI --> User : 메인 화면 표시
+else 인증 실패
+  UserEntity --> Auth : 인증 실패
+  Auth -> Log : 로그인 실패 로그 생성()
+  Auth --> UI : 오류 메시지 전달
+  UI --> User : 로그인 실패 메시지 표시
+end
+
+@enduml
